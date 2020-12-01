@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class Formula extends JFrame{
     private static final int WIDTH = 500;
@@ -13,6 +14,8 @@ public class Formula extends JFrame{
     private JTextField textFieldY;
     private JTextField textFieldZ;
     private JTextField textFieldResult;
+    public double sum = 0;
+    public JTextField Temp4;
     //радио кнопки
     private ButtonGroup radioButtons = new ButtonGroup();
     //Контейнер для отображения радио кнопок
@@ -120,12 +123,60 @@ public class Formula extends JFrame{
                 textFieldResult.setText("0");
             }
         });
+        //создание МС кнопки
+        JButton buttonMC = new JButton("MC");
+        buttonMC.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ev) {
+                Temp4.setText("0");
+                textFieldX.setText("0");
+                textFieldY.setText("0");
+                textFieldZ.setText("0");
+                textFieldResult.setText("0");
+            }
+        });
+        //создание М+ кнопки
+        JButton buttonM = new JButton("M+");
+        buttonM.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ev) {
+                double temp2 = 0;
+                try{
+                    String temp = textFieldResult.getText();
+                    if(temp.isEmpty()){
+                        throw new IOException("Incorrect format");
+                    }
+                    temp2 = Double.valueOf(temp);
+                }
+                catch (IOException e){
+                    System.out.println("Please enter numbers");
+                }
+                sum += temp2;
+                String temp3 = Double.toString(sum);
+                Temp4.setText(temp3);
+            }
+        });
         Box hboxButtons = Box.createHorizontalBox();
         hboxButtons.add(Box.createHorizontalGlue());
         hboxButtons.add(buttonVichislit);
         hboxButtons.add(Box.createHorizontalStrut(40));
         hboxButtons.add(buttonErase);
+        hboxButtons.add(Box.createHorizontalStrut(40));
+        hboxButtons.add(buttonMC);
+        hboxButtons.add(Box.createHorizontalStrut(40));
+        hboxButtons.add(buttonM);
         hboxButtons.add(Box.createHorizontalGlue());
+        //создание вывода Sum
+        JLabel labelsum = new JLabel("Sum:");
+        Temp4 = new JTextField("0",15);
+        Temp4.setMaximumSize(Temp4.getPreferredSize());
+        Box hboxTemp = Box.createHorizontalBox();
+        hboxTemp.add(Box.createHorizontalGlue());
+        hboxTemp.add(labelsum);
+        hboxTemp.add(Box.createHorizontalStrut(10));
+        hboxTemp.add(Temp4);
+        hboxTemp.add(Box.createHorizontalGlue());
+        Temp4.setEditable(false);
         //Сборка панелей окна
         Box vboxOkna = Box.createVerticalBox();
         vboxOkna.add(Box.createVerticalGlue());
@@ -135,6 +186,8 @@ public class Formula extends JFrame{
         vboxOkna.add(hboxResult);
         vboxOkna.add(Box.createVerticalGlue());
         vboxOkna.add(hboxButtons);
+        vboxOkna.add(Box.createVerticalGlue());
+        vboxOkna.add(hboxTemp);
         vboxOkna.add(Box.createVerticalGlue());
         getContentPane().add(vboxOkna, BorderLayout.CENTER);
 

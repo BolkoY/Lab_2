@@ -1,4 +1,4 @@
-package lab_2;
+package lab_2;  //вариант А9
 
     import javax.swing.*;
 

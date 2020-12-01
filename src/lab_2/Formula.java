@@ -1,4 +1,4 @@
-package lab_2;
+package lab_2; 
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,9 +41,10 @@ public class Formula extends JFrame{
     }
     public Formula(){
         //заголовок
-        super("Калькулятор формулы");
+        super("Вычисление формулы");
         //установка размера и положения окна
         setSize(WIDTH,HEIGHT);
+        //для получения ряда характеристик
         Toolkit kit = Toolkit.getDefaultToolkit();
         setLocation((kit.getScreenSize().width - WIDTH) / 2,(kit.getScreenSize().height - HEIGHT) / 2);
         //Добавление радио кнопок
@@ -57,5 +58,85 @@ public class Formula extends JFrame{
         JLabel labelX = new JLabel("X:");
         textFieldX = new JTextField("0", 10);
         textFieldX.setMaximumSize(textFieldX.getPreferredSize());
+        JLabel labelY = new JLabel("Y:");
+        textFieldY = new JTextField("0", 10);
+        textFieldY.setMaximumSize(textFieldY.getPreferredSize());
+        JLabel labelZ = new JLabel("z:");
+        textFieldZ = new JTextField("0", 10);
+        textFieldZ.setMaximumSize(textFieldZ.getPreferredSize());
+        Box hboxVariables = Box.createHorizontalBox();
+        hboxVariables.add(Box.createHorizontalGlue());
+        hboxVariables.add(labelX);
+        hboxVariables.add(Box.createHorizontalStrut(10));
+        hboxVariables.add(textFieldX);
+        hboxVariables.add(Box.createHorizontalStrut(50));
+        hboxVariables.add(labelY);
+        hboxVariables.add(Box.createHorizontalStrut(10));
+        hboxVariables.add(textFieldY);
+        hboxVariables.add(Box.createHorizontalStrut(50));
+        hboxVariables.add(labelZ);
+        hboxVariables.add(Box.createHorizontalStrut(10));
+        hboxVariables.add(textFieldZ);
+        hboxVariables.add(Box.createHorizontalGlue());
+        //Добавление области для вывода рузультата
+        JLabel labelResult = new JLabel("Результат:");
+        textFieldResult = new JTextField("0",15);
+        textFieldResult.setMaximumSize(textFieldResult.getPreferredSize());
+        Box hboxResult = Box.createHorizontalBox();
+        hboxResult.add(Box.createHorizontalGlue());
+        hboxResult.add(labelResult);
+        hboxResult.add(Box.createHorizontalStrut(10));
+        hboxResult.add(textFieldResult);
+        hboxResult.add(Box.createHorizontalGlue());
+        textFieldResult.setEditable(false);
+        //создвние кнопок
+        JButton buttonVichislit = new JButton("Вычислить");
+        buttonVichislit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ev) {
+                try{
+                    Double x = Double.parseDouble(textFieldX.getText());
+                    Double y = Double.parseDouble(textFieldY.getText());
+                    Double z = Double.parseDouble(textFieldZ.getText());
+                    Double result;
+                    if (formulaId == 1)
+                        result = Formula_1(x, y, z);
+                    else
+                        result = Formula_2(x, y, z);
+                    textFieldResult.setText(result.toString());
+                } catch (NumberFormatException ex){
+                    JOptionPane.showMessageDialog(Formula.this,"Ошибка в формате записи числа с " +
+                            "плавающей точкой", "Ошибочный формат числа", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+        JButton buttonErase = new JButton("Очистить поля");
+        buttonErase.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ev) {
+                textFieldX.setText("0");
+                textFieldY.setText("0");
+                textFieldZ.setText("0");
+                textFieldResult.setText("0");
+            }
+        });
+        Box hboxButtons = Box.createHorizontalBox();
+        hboxButtons.add(Box.createHorizontalGlue());
+        hboxButtons.add(buttonVichislit);
+        hboxButtons.add(Box.createHorizontalStrut(40));
+        hboxButtons.add(buttonErase);
+        hboxButtons.add(Box.createHorizontalGlue());
+        //Сборка панелей окна
+        Box vboxOkna = Box.createVerticalBox();
+        vboxOkna.add(Box.createVerticalGlue());
+        vboxOkna.add(hboxFormulaType);
+        vboxOkna.add(hboxVariables);
+        vboxOkna.add(Box.createVerticalGlue());
+        vboxOkna.add(hboxResult);
+        vboxOkna.add(Box.createVerticalGlue());
+        vboxOkna.add(hboxButtons);
+        vboxOkna.add(Box.createVerticalGlue());
+        getContentPane().add(vboxOkna, BorderLayout.CENTER);
+
     }
 }
